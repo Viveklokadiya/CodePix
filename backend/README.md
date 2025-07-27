@@ -1,146 +1,124 @@
-# CodePix Backend API
+# CodePix Backend - Next.js
 
-A Flask-based backend API that provides AI-powered code generation, explanation, translation, and optimization services using Google Gemini and Groq (LLaMA 3) models.
+This is the Next.js backend for CodePix, converted from the original Flask backend. It provides the same AI-powered code generation, explanation, translation, and optimization features.
 
 ## Features
 
 - **Code Generation**: Generate code from natural language descriptions
-- **Code Explanation**: Get explanations for existing code
-- **Code Translation**: Convert code between different programming languages
-- **Code Optimization**: Get optimization suggestions for existing code
-- **Multi-Model Support**: Support for both Google Gemini and Groq (LLaMA 3) models
+- **Code Explanation**: Get clear explanations of existing code
+- **Code Translation**: Translate code between different programming languages
+- **Code Optimization**: Get optimization suggestions and improved code
 
-## Setup
+## Supported AI Providers
 
-### 1. Install Dependencies
+- **Google Gemini** (gemini-2.0-flash-exp)
+- **Groq** (llama-3.3-70b-versatile)
 
-```bash
-pip install -r requirements.txt
+## API Endpoints
+
+All endpoints are accessible under `/api/ai/`:
+
+### POST /api/ai/generate
+Generate code from natural language description.
+
+**Request Body:**
+```json
+{
+  "prompt": "Create a function to sort an array",
+  "language": "javascript",
+  "complexity": "intermediate",
+  "modelProvider": "gemini"
+}
 ```
 
-### 2. Environment Variables
+### POST /api/ai/explain
+Explain existing code.
 
-Create a `.env` file in the backend directory with your API keys:
+**Request Body:**
+```json
+{
+  "prompt": "const arr = [3,1,4,1,5]; arr.sort((a,b) => a-b);",
+  "modelProvider": "gemini"
+}
+```
+
+### POST /api/ai/translate
+Translate code from one language to another.
+
+**Request Body:**
+```json
+{
+  "code": "def hello(): print('Hello World')",
+  "sourceLanguage": "python",
+  "targetLanguage": "javascript",
+  "modelProvider": "gemini"
+}
+```
+
+### POST /api/ai/optimize
+Optimize existing code.
+
+**Request Body:**
+```json
+{
+  "code": "let sum = 0; for(let i = 0; i < arr.length; i++) { sum += arr[i]; }",
+  "language": "javascript",
+  "modelProvider": "gemini"
+}
+```
+
+## Environment Setup
+
+Create a `.env.local` file with your API keys:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 GROQ_API_KEY=your_groq_api_key_here
 ```
 
-### 3. Run the Server
+## Installation and Setup
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Set up environment variables in `.env.local`
+
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Build for production:
+```bash
+npm run build
+npm start
+```
+
+## Docker Setup
+
+Build and run with Docker:
 
 ```bash
-python server.py
+docker-compose up --build
 ```
 
-The server will start on `http://localhost:5000`
+The application will be available at `http://localhost:3000`
 
-## API Endpoints
+## Migration from Flask
 
-### 1. Status Check
-- **GET** `/api/status`
-- Returns server status and available endpoints
+This Next.js backend provides identical functionality to the original Flask backend:
 
-### 2. Code Generation
-- **POST** `/api/ai/generate`
-- **Purpose**: Generate code from natural language description
-- **Request Body**:
-  ```json
-  {
-    "prompt": "Write a function to sort an array",
-    "modelProvider": "gemini", // or "groq"
-    "language": "python",
-    "complexity": "intermediate"
-  }
-  ```
+- All API endpoints maintain the same request/response formats
+- Same AI model integrations (Gemini and Groq)
+- Same prompt formatting and response processing
+- CORS is properly configured for frontend integration
 
-### 3. Code Explanation
-- **POST** `/api/ai/explain`
-- **Purpose**: Explain existing code
-- **Request Body**:
-  ```json
-  {
-    "prompt": "function add(a, b) { return a + b; }",
-    "modelProvider": "groq" // or "gemini"
-  }
-  ```
+## Frontend Integration
 
-### 4. Code Translation
-- **POST** `/api/ai/translate`
-- **Purpose**: Convert code from one language to another
-- **Request Body**:
-  ```json
-  {
-    "code": "function add(a, b) { return a + b; }",
-    "sourceLanguage": "javascript",
-    "targetLanguage": "python",
-    "modelProvider": "gemini"
-  }
-  ```
+Update your frontend to point to the new backend URL:
+- Development: `http://localhost:3000`
+- Production: Your deployed Next.js backend URL
 
-### 5. Code Optimization
-- **POST** `/api/ai/optimize`
-- **Purpose**: Get optimization suggestions for code
-- **Request Body**:
-  ```json
-  {
-    "code": "def find_duplicates(arr): ...",
-    "language": "python",
-    "modelProvider": "groq"
-  }
-  ```
-
-## Response Format
-
-All endpoints return responses in the following format:
-
-```json
-{
-  "model": "model-name",
-  "modelProvider": "gemini|groq",
-  "result": "AI generated content",
-  "time_taken": "X.XX seconds"
-}
-```
-
-## Testing
-
-Run the comprehensive test suite:
-
-```bash
-python test_all_endpoints.py
-```
-
-Or test individual endpoints:
-
-```bash
-python test_generate_code.py
-```
-
-## Model Providers
-
-### Google Gemini
-- **Model**: `gemini-2.0-flash`
-- **Best for**: Code generation, translation
-- **API Key**: Required from Google AI Studio
-
-### Groq (LLaMA 3)
-- **Model**: `llama-3.3-70b-versatile`
-- **Best for**: Code explanation, optimization
-- **API Key**: Required from Groq
-
-## Error Handling
-
-The API includes comprehensive error handling:
-- Missing required fields
-- Invalid model providers
-- API key configuration issues
-- Network and service errors
-
-## CORS
-
-Cross-Origin Resource Sharing (CORS) is enabled for all routes to allow frontend integration.
-
-## Logging
-
-The application includes logging for debugging and monitoring purposes. Logs are output to the console with INFO level. 
+No changes are needed to the frontend code - all API contracts remain the same.

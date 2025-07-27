@@ -1,11 +1,13 @@
 services:
-  codepix-backend:
+  codepix-backend-nextjs:
     build: 
       context: .
       dockerfile: Dockerfile
-    image: mayank13828/codepix-backend:latest
+    image: codepix-backend-nextjs:latest
     ports:
-      - "5000:5000"
+      - "3000:3000"
     env_file:
-      - .env
+      - .env.local
     restart: unless-stopped
+    environment:
+      - NODE_ENV=production
