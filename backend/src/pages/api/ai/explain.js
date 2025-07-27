@@ -4,8 +4,12 @@ const {
   createApiResponse, 
   createErrorResponse 
 } = require('../../../lib/utils');
+import cors from '../../../../lib/cors-middleware';
 
 export default async function handler(req, res) {
+  // Apply CORS middleware
+  await cors(req, res);
+  
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });

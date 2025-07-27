@@ -1,4 +1,9 @@
+import cors from '../../../lib/cors-middleware'
+
 export default async function handler(req, res) {
+  // Apply CORS middleware
+  await cors(req, res);
+  
   // Allow both GET and POST requests for flexibility
   if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
